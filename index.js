@@ -38,6 +38,50 @@ const REMOVE_TODO = 'REMOVE_TODO'
 const TOGGLE_TODO = 'TOGGLE_TODO'
 const ADD_GOAL = 'ADD_GOAL'
 const REMOVE_GOAL = 'REMOVE_GOAL'
+const TOGGLE_GOAL = 'TOGGLE_GOAL'
+
+//actions
+function addTodoAction (todo) {
+  return {
+    type: ADD_TODO,
+    todo,
+  }
+}
+
+function removeTodoAction (id) {
+  return {
+    type: REMOVE_TODO,
+    id,
+  }
+}
+
+function toggleTodoAction (id) {
+  return {
+    type: TOGGLE_TODO,
+    id,
+  }
+}
+
+function addGoalAction (goal) {
+  return {
+    type: ADD_GOAL,
+    goal,
+  }
+}
+
+function removeGoalAction (id) {
+  return {
+    type: REMOVE_GOAL,
+    id,
+  }
+}
+
+function toggleGoalAction (id) {
+  return {
+    type: TOGGLE_GOAL,
+    id,
+  }
+}
 
 //this is a reducer and must be a pure function
 function todos (state = [], action) {
@@ -61,6 +105,9 @@ function goals (state = [], action) {
       return state.concat([action.goal])
     case REMOVE_GOAL :
       return state.filter((goal) => goal.id !== action.id)
+    case TOGGLE_GOAL:
+      return state.map((goal) => goal.id !== action.id ? goal :
+        Object.assign({}, goal, { complete: !goal.complete }))
     default :
       return state
   }
@@ -80,21 +127,34 @@ store.subscribe(() => {
   console.log('The new state is: ', store.getState())
 })
 
-store.dispatch({
-  type: ADD_TODO,
-  todo: {
-    id: 0,
-    name: 'Walk the dog',
-    complete: false,
-  }
-})
+store.dispatch(addTodoAction({
+  id: 0,
+  name: 'Walk the dog',
+  complete: false,
+}))
 
-store.dispatch({
-  type: REMOVE_TODO,
-  id: 1
-})
+store.dispatch(addTodoAction({
+  id: 1,
+  name: 'Walk the cat',
+  complete: false,
+}))
 
-store.dispatch({
-  type: TOGGLE_TODO,
-  id: 0
-})
+store.dispatch(removeTodoAction(1))
+
+store.dispatch(toggleTodoAction(0))
+
+store.dispatch(addGoalAction({
+  id: 0,
+  name: 'Lose 20 pounds',
+  complete: false,
+}))
+
+store.dispatch(addGoalAction({
+  id: 1,
+  name: 'Meet someone famous',
+  complete: false,
+}))
+
+store.dispatch(removeGoalAction(1))
+
+store.dispatch(toggleGoalAction(0))
