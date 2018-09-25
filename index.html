@@ -6,6 +6,7 @@
   <script src="https://unpkg.com/react@16.3.0-alpha.1/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@16.3.0-alpha.1/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  <script src="https://tylermcginnis.com/goals-todos-api/index.js"></script>
   <title>Udacity Todos Goals</title>
 </head>
 
@@ -182,13 +183,13 @@
         return (
           <div>
             <h1>Todo List</h1>
-            
+
             <input
               type="text"
               placeholder="Add Todo"
               ref={(input) => this.input = input} //i can get the input value by calling this.input
             />
-            
+
             <button onClick={this.addItem}>Add Todo</button>
 
             <List
@@ -221,16 +222,16 @@
         return (
           <div>
             <h1>Goals List</h1>
-            
+
             <input
               type="text"
               placeholder="Add Goal"
               ref={(input) => this.input = input} //i can get the input value by calling this.input
             />
-            
+
             <button onClick={this.addItem}>Add Goal</button>
 
-            <List 
+            <List
               items={this.props.goals}
               remove={this.removeItem}
             />
@@ -253,7 +254,7 @@
         return (
           <div>
             <Todos todos={todos} store={this.props.store} />
-            <Goals goals={goals} store={this.props.store} />  
+            <Goals goals={goals} store={this.props.store} />
           </div>
         )
       }
