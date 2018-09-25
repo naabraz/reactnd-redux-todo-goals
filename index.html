@@ -78,6 +78,18 @@
       }
     }
 
+    function handleDeleteTodo (todo) {
+      return (dispatch) => {
+        dispatch(removeTodoAction(todo.id))
+
+      return API.deleteTodo(todo.id)
+        .catch(() => {
+          dispatch(addTodoAction(todo)) //if it fails, add todo item back
+          alert('An error occurred. Try again.')
+        })
+      }
+    }
+
     //this is a reducer and must be a pure function
     function todos(state = [], action) {
       switch (action.type) {
@@ -153,11 +165,19 @@
       return result
     }
 
+    const thunk = (store) => (next) => (action) => {
+      if (typeof action === 'function') {
+        return action(store.dispatch)
+      }
+
+      return next(action)
+    }
+
     const store = Redux.createStore(Redux.combineReducers({
       todos,
       goals,
       loading
-    }), Redux.applyMiddleware(checker, logger))
+    }), Redux.applyMiddleware(thunk, checker, logger))
   </script>
 
   <script type="text/babel">
@@ -193,13 +213,7 @@
       }
 
       removeItem = (todo) => {
-        this.props.store.dispatch(removeTodoAction(todo.id)) //optimistic update
-
-        return API.deleteTodo(todo.id)
-          .catch(() => {
-            this.props.store.dispatch(addTodoAction(todo)) //if it fails, add todo item back
-            alert('An error occurred. Try again.')
-          })
+        this.props.store.dispatch(handleDeleteTodo(todo)) //optimistic update
       }
 
       toggleItem = (id) => {
