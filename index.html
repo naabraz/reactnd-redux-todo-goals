@@ -10,22 +10,6 @@
 </head>
 
 <body>
-  <div>
-    <h1>Todo List</h1>
-    <input id="todo" type="text" placeholder="Add Todo" />
-    <button id="todoBtn">Add Todo</button>
-    <ul id="todos"></ul>
-  </div>
-
-  <div>
-    <h1>Goals</h1>
-    <input id="goal" type="text" placeholder="Add Goal" />
-    <button id="goalBtn">Add Goal</button>
-    <ul id="goals"></ul>
-  </div>
-
-  <hr />
-
   <div id="app"></div>
 
   <script type='text/javascript'>
@@ -150,87 +134,6 @@
       todos,
       goals
     }), Redux.applyMiddleware(checker, logger))
-
-    store.subscribe(() => {
-      const { goals, todos } = store.getState()
-
-      document.getElementById('goals').innerHTML = ''
-      document.getElementById('todos').innerHTML = ''
-
-      todos.forEach(addTodoToDOM)
-      goals.forEach(addGoalToDOM)
-    })
-
-    function addTodo () {
-      const input = document.getElementById('todo')
-      const name = input.value
-      input.value = ''
-
-      store.dispatch(addTodoAction({
-        name,
-        complete: false,
-        id: generateId()
-      }))
-    }
-
-    function addGoal () {
-      const input = document.getElementById('goal')
-      const name = input.value
-      input.value = ''
-
-      store.dispatch(addGoalAction({
-        name,
-        complete: false,
-        id: generateId()
-      }))
-    }
-
-    document.getElementById('todoBtn')
-      .addEventListener('click', addTodo)
-
-    document.getElementById('goalBtn')
-      .addEventListener('click', addGoal)
-
-    function createRemoveButton (onClick) {
-      const removeBtn = document.createElement('button')
-      removeBtn.innerHTML = 'X'
-      removeBtn.addEventListener('click', onClick)
-      return removeBtn
-    }
-
-    function addTodoToDOM (todo) {
-      const node = document.createElement('li')
-      const text = document.createTextNode(todo.name)
-
-      const removeBtn = createRemoveButton(() => {
-        store.dispatch(removeTodoAction(todo.id))
-      })
-
-      node.appendChild(text)
-      node.appendChild(removeBtn)
-      node.style.textDecoration = todo.complete ? 'line-through' : 'none'
-      node.addEventListener('click', () => {
-        store.dispatch(toggleTodoAction(todo.id))
-      })
-
-      document.getElementById('todos')
-        .appendChild(node)
-    }
-
-    function addGoalToDOM (goal) {
-      const node = document.createElement('li')
-      const text = document.createTextNode(goal.name)
-
-      const removeBtn = createRemoveButton(() => {
-        store.dispatch(removeGoalAction(goal.id))
-      })
-
-      node.appendChild(text)
-      node.appendChild(removeBtn)
-
-      document.getElementById('goals')
-        .appendChild(node)
-    }
   </script>
 
   <script type="text/babel">
