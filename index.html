@@ -78,7 +78,7 @@
         goals
       }
     }
-    
+
     function handleInitialData () {
       return (dispatch) => {
         Promise.all([
@@ -253,7 +253,7 @@
     class Todos extends React.Component {
       addItem = (e) => {
         e.preventDefault()
-        
+
         this.props.store.dispatch(handleAddTodo(
           this.input.value,
           () => this.input.value = ''
@@ -293,7 +293,7 @@
     class Goals extends React.Component {
       addItem = (e) => {
         e.preventDefault()
-        
+
         this.props.store.dispatch(handleAddGoal(
           this.input.value,
           () => this.input.value = ''
@@ -329,7 +329,7 @@
     class App extends React.Component {
       componentDidMount () {
         const { store } = this.props
-        
+
         store.dispatch(handleInitialData())
 
         store.subscribe(() => this.forceUpdate()) //re-render when state changes
@@ -352,8 +352,34 @@
       }
     }
 
+    class ConnectedApp extends React.Component {
+      render () {
+        return (
+          <Context.Consumer>
+            {(store) => (
+              <App store={store} />
+            )}
+          </Context.Consumer>
+        )
+      }
+    }
+
+    const Context = React.createContext()
+
+    class Provider extends React.Component {
+      render () {
+        return (
+          <Context.Provider value={this.props.store}>
+            {this.props.children}
+          </Context.Provider>
+        )
+      }
+    }
+
     ReactDOM.render(
-      <App store={store}/>,
+      <Provider store={store}>
+        <App store={store}/>
+      </Provider>,
       document.getElementById('app')
     )
   </script>
